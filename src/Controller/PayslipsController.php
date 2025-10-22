@@ -21,7 +21,7 @@ class PayslipsController extends AppController
         $payslip = $this->Payslips->get($id, [
             'contain' => ['Employees', 'Bonuses', 'Deductions']
         ]);
-
+ 
         $this->set('payslip', $payslip);
     }
 
