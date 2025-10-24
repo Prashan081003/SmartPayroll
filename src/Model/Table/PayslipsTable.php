@@ -197,7 +197,7 @@ class PayslipsTable extends Table
              * @param int $year Year
              * @return int Number of working days
              */
-            private function calculateWorkingDays($month, $year)
+            public function calculateWorkingDays($month, $year)
             {
                 $totalDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
                 $workingDays = 0;

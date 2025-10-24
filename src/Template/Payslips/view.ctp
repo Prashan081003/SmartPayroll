@@ -20,7 +20,7 @@
                 </tr>
                 <tr>
                     <td><strong>Department:</strong></td>
-                    <td><?= h($payslip->employee->department) ?></td>
+                    <td><?= h($payslip->employee->department->name) ?></td>
                     <td><strong>Designation:</strong></td>
                     <td><?= h($payslip->employee->designation) ?></td>
                 </tr>
@@ -33,68 +33,82 @@
             </table>
         </div>
 
-        <!-- Salary Breakdown -->
-        <div class="salary-breakdown">
-            <h4>Salary Breakdown</h4>
-            
-            <table class="breakdown-table">
-                <thead>
-                    <tr>
-                        <th colspan="2">Earnings</th>
-                        <th colspan="2">Deductions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Base Pay</td>
-                        <td class="amount">₹<?= $this->Number->format($payslip->base_pay, ['places' => 2]) ?></td>
-                        <td colspan="2"></td>
-                    </tr>
-                    
-                    <?php if (!empty($payslip->bonuses)): ?>
-                        <tr>
-                            <td colspan="4"><strong>Bonuses:</strong></td>
-                        </tr>
-                        <?php foreach ($payslip->bonuses as $bonus): ?>
-                            <tr>
-                                <td>&nbsp;&nbsp;<?= h($bonus->bonus_type) ?></td>
-                                <td class="amount">₹<?= $this->Number->format($bonus->amount, ['places' => 2]) ?></td>
-                                <td colspan="2"></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                    
-                    <?php if (!empty($payslip->deductions)): ?>
-                        <tr>
-                            <td colspan="2"></td>
-                            <td colspan="2"><strong>Deductions:</strong></td>
-                        </tr>
-                        <?php foreach ($payslip->deductions as $deduction): ?>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td>&nbsp;&nbsp;<?= h($deduction->deduction_type) ?></td>
-                                <td class="amount">₹<?= $this->Number->format($deduction->amount, ['places' => 2]) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                    
-                    <tr class="totals">
-                        <td><strong>Total Earnings</strong></td>
-                        <td class="amount"><strong>₹<?= $this->Number->format($payslip->base_pay + $payslip->total_bonus, ['places' => 2]) ?></strong></td>
-                        <td><strong>Total Deductions</strong></td>
-                        <td class="amount"><strong>₹<?= $this->Number->format($payslip->total_deductions, ['places' => 2]) ?></strong></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+       <!-- Salary Breakdown -->
+<div class="salary-breakdown" style="width: 60%; margin: 0 auto;">
+    <h4 style="text-align:center;">Salary Breakdown</h4>
+
+    <!-- Earnings Table -->
+    <table class="breakdown-table" style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+        <thead>
+            <tr style="background-color:#000; color:#fff;">
+                <th colspan="2" style="text-align:left; padding:8px;">Earnings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding:8px;">Base Pay</td>
+                <td style="padding:8px; text-align:right;">₹<?= $this->Number->format($payslip->employee->base_salary, ['places' => 2]) ?></td>
+            </tr>
+           
+        </tbody>
+    </table>
+
+    <!-- Bonuses Table -->
+    <?php if (!empty($payslip->bonuses)): ?>
+    <table class="breakdown-table" style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+        <thead>
+            <tr style="background-color:#000; color:#fff;">
+                <th colspan="2" style="text-align:left; padding:8px;">Bonuses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($payslip->bonuses as $bonus): ?>
+                <tr>
+                    <td style="padding:8px;"><?= h($bonus->bonus_type) ?></td>
+                    <td style="padding:8px; text-align:right;">₹<?= $this->Number->format($bonus->amount, ['places' => 2]) ?></td>
+                </tr>
+            <?php endforeach; ?>
+             <tr>
+                <td style="padding:8px;"><strong>Total Bonuses</strong></td>
+                <td style="padding:8px; text-align:right;"><strong>₹<?= $this->Number->format($payslip->total_bonus, ['places' => 2]) ?></strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <?php endif; ?>
+
+    <!-- Deductions Table -->
+    <?php if (!empty($payslip->deductions)): ?>
+    <table class="breakdown-table" style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+        <thead>
+            <tr style="background-color:#000; color:#fff;">
+                <th colspan="2" style="text-align:left; padding:8px;">Deductions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($payslip->deductions as $deduction): ?>
+                <tr>
+                    <td style="padding:8px;"><?= h($deduction->deduction_type) ?></td>
+                    <td style="padding:8px; text-align:right;">₹<?= $this->Number->format($deduction->amount, ['places' => 2]) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td style="padding:8px;"><strong>Total Deductions</strong></td>
+                <td style="padding:8px; text-align:right;"><strong>₹<?= $this->Number->format($payslip->total_deductions, ['places' => 2]) ?></strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <?php endif; ?>
+</div>
+
 
         <!-- Net Salary -->
         <div class="net-salary">
             <table>
-                <tr>
+               <tr>
                     <td><strong>Days Worked:</strong></td>
-                    <td><?= h($payslip->days_worked) ?> days</td>
+                    <td><?= h($payslip->days_worked) ?> / <?= h($totalWorkingDays) ?> days</td>
                 </tr>
+
                 <tr class="highlight">
                     <td><strong>Net Salary:</strong></td>
                     <td><strong>₹<?= $this->Number->format($payslip->net_salary, ['places' => 2]) ?></strong></td>

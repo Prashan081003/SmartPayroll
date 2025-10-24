@@ -99,6 +99,9 @@
 </div>
 
 <style>
+    a {
+        color : black; 
+    }
 
 .table-header th {
     color: black !important;

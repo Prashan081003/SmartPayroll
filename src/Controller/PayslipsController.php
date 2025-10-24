@@ -16,14 +16,23 @@ class PayslipsController extends AppController
         $this->set(compact('payslips'));
     }
 
-    public function view($id = null)
-    {
-        $payslip = $this->Payslips->get($id, [
-            'contain' => ['Employees', 'Bonuses', 'Deductions']
-        ]);
- 
-        $this->set('payslip', $payslip);
-    }
+public function view($id = null)
+{
+  $payslip = $this->Payslips->get($id, [
+    'contain' => [
+        'Employees' => ['Departments'], 
+        'Bonuses', 
+        'Deductions'
+    ]
+]);
+
+    // Calculate total working days for this payslip’s month & year
+    $totalWorkingDays = $this->Payslips->calculateWorkingDays($payslip->month, $payslip->year);
+
+    // Pass it to view
+    $this->set(compact('payslip', 'totalWorkingDays'));
+}
+
 
     /**
      * Generate payslip form

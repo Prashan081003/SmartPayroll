@@ -15,9 +15,9 @@ class EmployeesController extends AppController
             $request = $this->request->getQueryParams(); // safer way for CakePHP 3.4+
 
             // 🔹 Filtering by Department
-           if (!empty($request['department'])) {
-    $query->where(['Employees.department_id' => $request['department']]);
-}
+            if (!empty($request['department'])) {
+                $query->where(['Employees.department_id' => $request['department']]);
+            }
 
 
             // 🔹 Filtering by Designation
