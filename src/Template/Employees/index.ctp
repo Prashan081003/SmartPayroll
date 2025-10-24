@@ -7,36 +7,42 @@
         <?= $this->Html->link(__('Add Employee'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     </div>
 
-    <!-- Filters -->
-    <div class="filters">
-        <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <fieldset>
-            <legend><?= __('Filter Employees') ?></legend>
-            <?= $this->Form->control('department', [
-                'options' => $departments,
-                'empty' => 'All Departments',
-                'value' => $this->request->getQuery('department')
-            ]) ?>
-            <?= $this->Form->control('designation', [
-                'options' => $designations,
-                'empty' => 'All Designations',
-                'value' => $this->request->getQuery('designation')
-            ]) ?>
-            <?= $this->Form->control('status', [
-                'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
-                'empty' => 'All Status',
-                'value' => $this->request->getQuery('status')
-            ]) ?>
-        </fieldset>
+<!-- Filters -->
+<div class="filters">
+    <?= $this->Form->create(null, ['type' => 'get', 'class' => 'flex-form']) ?>
+    <fieldset style="display:flex; gap:10px; align-items:flex-end;">
+        <?= $this->Form->control('department', [
+            'options' => $departments,
+            'empty' => 'All Departments',
+            'value' => $this->request->getQuery('department'),
+            'label' => false,
+            'style' => 'min-width:150px;'
+        ]) ?>
+        <?= $this->Form->control('designation', [
+            'options' => $designations,
+            'empty' => 'All Designations',
+            'value' => $this->request->getQuery('designation'),
+            'label' => false,
+            'style' => 'min-width:150px;'
+        ]) ?>
+        <?= $this->Form->control('status', [
+            'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
+            'empty' => 'All Status',
+            'value' => $this->request->getQuery('status'),
+            'label' => false,
+            'style' => 'min-width:120px;'
+        ]) ?>
         <?= $this->Form->button(__('Filter'), ['type' => 'submit', 'class' => 'button']) ?>
         <?= $this->Html->link(__('Clear'), ['action' => 'index'], ['class' => 'button button-secondary']) ?>
-        <?= $this->Form->end() ?>
-    </div>
+    </fieldset>
+    <?= $this->Form->end() ?>
+</div>
+
 
     <div class="table-responsive">
         <table>
-            <thead>
-                <tr>
+            <thead class="table-header">
+                <tr >
                     <th><?= $this->Paginator->sort('employee_id', 'Employee ID') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('department') ?></th>
@@ -54,7 +60,7 @@
                 <tr>
                     <td><?= h($employee->employee_id) ?></td>
                     <td><?= h($employee->name) ?></td>
-                    <td><?= h($employee->department) ?></td>
+                    <td><?= h($employee->department->name) ?></td>
                     <td><?= h($employee->designation) ?></td>
                     <td>₹<?= $this->Number->format($employee->base_salary) ?></td>
                     <td><?= h($employee->joining_date->format('Y-m-d')) ?></td>
@@ -89,6 +95,10 @@
 </div>
 
 <style>
+
+.table-header th {
+    color: black !important;
+}
 .badge {
     padding: 5px 10px;
     border-radius: 3px;
@@ -156,9 +166,9 @@
 }
 
 /* Table Header - Black Text */
-table th {
+/* table th {
     background-color: #667eea;
     color: #000000 !important;
     font-weight: 600;
-}
+} */
 </style>

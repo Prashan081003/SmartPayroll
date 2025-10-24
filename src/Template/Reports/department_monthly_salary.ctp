@@ -1,30 +1,51 @@
 <div class="reports department-monthly content">
     <h3><?= __('Department Monthly Salary Report') ?></h3>
 
-    <!-- Filter -->
-    <div class="filters">
-        <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <?= $this->Form->control('month', [
-            'type' => 'select',
-            'options' => [
-                '01' => 'January', '02' => 'February', '03' => 'March',
-                '04' => 'April', '05' => 'May', '06' => 'June',
-                '07' => 'July', '08' => 'August', '09' => 'September',
-                '10' => 'October', '11' => 'November', '12' => 'December'
-            ],
-            'value' => $month,
-            'label' => 'Month'
-        ]) ?>
-        <?= $this->Form->control('year', [
-            'type' => 'number',
-            'value' => $year,
-            'min' => 2020,
-            'max' => date('Y'),
-            'label' => 'Year'
-        ]) ?>
-        <?= $this->Form->button(__('Generate Report'), ['type' => 'submit']) ?>
-        <?= $this->Form->end() ?>
+   <!-- Filter -->
+<div class="filters" style="margin-bottom: 20px;">
+    <?= $this->Form->create(null, ['type' => 'get', 'class' => 'form-inline']) ?>
+    <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+            <?= $this->Form->control('month', [
+                'type' => 'select',
+                'options' => [
+                    '01' => 'January', '02' => 'February', '03' => 'March',
+                    '04' => 'April', '05' => 'May', '06' => 'June',
+                    '07' => 'July', '08' => 'August', '09' => 'September',
+                    '10' => 'October', '11' => 'November', '12' => 'December'
+                ],
+                'value' => $month,
+                'label' => 'Month'
+            ]) ?>
+        </div>
+
+        <div>
+            <?= $this->Form->control('year', [
+                'type' => 'number',
+                'value' => $year,
+                'min' => 2020,
+                'max' => date('Y'),
+                'label' => 'Year'
+            ]) ?>
+        </div>
+
+        <div>
+            <?= $this->Form->control('department_id', [
+                'type' => 'select',
+                'options' => $departments,
+                'empty' => 'All Departments',
+                'value' => $selectedDepartment,
+                'label' => 'Department'
+            ]) ?>
+        </div>
+
+        <div>
+            <?= $this->Form->button(__('Generate Report'), ['type' => 'submit', 'class' => 'button']) ?>
+        </div>
     </div>
+    <?= $this->Form->end() ?>
+</div>
+
 
     <h4>Report for: <?= date('F Y', strtotime("$year-$month-01")) ?></h4>
 
@@ -71,6 +92,7 @@
                 <tr class="total-row">
                     <td colspan="2"><strong>Total</strong></td>
                     <td><strong>₹<?= $this->Number->format($totalBasePay, ['places' => 2]) ?></strong></td>
+                
                     <td><strong>₹<?= $this->Number->format($totalBonus, ['places' => 2]) ?></strong></td>
                     <td><strong>₹<?= $this->Number->format($totalDeductions, ['places' => 2]) ?></strong></td>
                     <td><strong>₹<?= $this->Number->format($totalNetSalary, ['places' => 2]) ?></strong></td>

@@ -75,6 +75,15 @@
                         <li><?= $this->Html->link('Employee Yearly Salary', ['controller' => 'Reports', 'action' => 'employeeYearlySalary']) ?></li>
                     </ul>
                 </li>
+                    <li class="nav-dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        Departments <span class="arrow">▼</span>
+                    </a>
+                    <ul class="dropdown-content">
+                        <li><?= $this->Html->link(__('Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
+                    </ul>
+                </li>
+                 
             </ul>
         </div>
     </nav>

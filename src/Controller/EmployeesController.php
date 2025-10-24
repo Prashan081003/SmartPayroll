@@ -5,43 +5,55 @@ use App\Controller\AppController;
 
 class EmployeesController extends AppController
 {
-    public function index()
-    {
-        $query = $this->Employees->find();
+            public function index()
+        {
+            // Start query with relation (if departments table is associated)
+            $query = $this->Employees->find('all', [
+                'contain' => ['Departments'] // include department data
+            ]);
 
-        // Filtering
-        if ($this->request->query('department')) {
-            $query->where(['department' => $this->request->query('department')]);
-        }
+            $request = $this->request->getQueryParams(); // safer way for CakePHP 3.4+
 
-        if ($this->request->query('designation')) {
-            $query->where(['designation' => $this->request->query('designation')]);
-        }
+            // 🔹 Filtering by Department
+            if (!empty($request['department_id'])) {
+                $query->where(['Employees.department_id' => $request['department_id']]);
+            }
 
-        if ($this->request->query('status')) {
-            $query->where(['status' => $this->request->query('status')]);
-        }
+            // 🔹 Filtering by Designation
+            if (!empty($request['designation'])) {
+                $query->where(['Employees.designation' => $request['designation']]);
+            }
 
-        // Sorting
-        $sortField = $this->request->query('sort') ?: 'employee_id';
-        $sortDirection = $this->request->query('direction') ?: 'asc';
-        $query->order([$sortField => $sortDirection]);
+            // 🔹 Filtering by Status
+            if (!empty($request['status'])) {
+                $query->where(['Employees.status' => $request['status']]);
+            }
 
-        $employees = $this->paginate($query);
+            // 🔹 Sorting (default: employee_id ASC)
+            $sortField = !empty($request['sort']) ? $request['sort'] : 'Employees.employee_id';
+            $sortDirection = !empty($request['direction']) ? $request['direction'] : 'asc';
+            $query->order([$sortField => $sortDirection]);
 
-        // Get unique departments and designations for filters
-        $departments = $this->Employees->find('list', [
-            'keyField' => 'department',
-            'valueField' => 'department'
-        ])->distinct(['department'])->toArray();
+            // 🔹 Pagination
+            $employees = $this->paginate($query);
 
-        $designations = $this->Employees->find('list', [
-            'keyField' => 'designation',
-            'valueField' => 'designation'
-        ])->distinct(['designation'])->toArray();
+            // 🔹 Fetch distinct departments for filter dropdown (from Departments table)
+            $departments = $this->Employees->Departments->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'name'
+            ])->toArray();
 
-        $this->set(compact('employees', 'departments', 'designations'));
-    }
+            // 🔹 Fetch unique designations for filter dropdown
+            $designations = $this->Employees->find('list', [
+                'keyField' => 'designation',
+                'valueField' => 'designation'
+            ])
+            ->distinct(['Employees.designation'])
+            ->toArray();
+
+            // 🔹 Pass data to view
+            $this->set(compact('employees', 'departments', 'designations'));
+}
 
     public function view($id = null)
     {
@@ -80,8 +92,10 @@ class EmployeesController extends AppController
                 $this->Flash->error(__('The employee could not be saved. Please, try again.'));
             }
         }
-
-        $this->set(compact('employee'));
+       // Added this line
+    $departments = $this->Employees->Departments->find('list', ['limit' => 200]);
+    
+    $this->set(compact('employee', 'departments'));
     }
 
     public function edit($id = null)
@@ -109,8 +123,10 @@ class EmployeesController extends AppController
                 $this->Flash->error(__('The employee could not be saved. Please, try again.'));
             }
         }
-
-        $this->set(compact('employee'));
+        // Add this line
+          $departments = $this->Employees->Departments->find('list', ['limit' => 200]);
+    
+            $this->set(compact('employee', 'departments'));
     }
 
     public function delete($id = null)

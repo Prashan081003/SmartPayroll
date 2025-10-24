@@ -1,19 +1,30 @@
 <div class="reports employee-yearly content">
     <h3><?= __('Employee Yearly Salary Report') ?></h3>
 
-    <!-- Filter -->
-    <div class="filters">
-        <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <?= $this->Form->control('year', [
-            'type' => 'number',
-            'value' => $year,
-            'min' => 2020,
-            'max' => date('Y'),
-            'label' => 'Year'
-        ]) ?>
-        <?= $this->Form->button(__('Generate Report'), ['type' => 'submit']) ?>
-        <?= $this->Form->end() ?>
-    </div>
+<!-- Filter -->
+<div class="filters" style="display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap;">
+    <?= $this->Form->create(null, ['type' => 'get', 'style' => 'display:flex; align-items:flex-end; gap:15px; flex-wrap:wrap;']) ?>
+
+    <?= $this->Form->control('year', [
+        'type' => 'number',
+        'value' => $year,
+        'min' => 2020,
+        'max' => date('Y'),
+        'label' => 'Year'
+    ]) ?>
+
+    <?= $this->Form->control('department_id', [
+        'type' => 'select',
+        'options' => $departments,
+        'empty' => 'All Departments',
+        'value' => $departmentId,
+        'label' => 'Department'
+    ]) ?>
+
+    <?= $this->Form->button(__('Generate Report'), ['type' => 'submit', 'class' => 'button']) ?>
+
+    <?= $this->Form->end() ?>
+</div>
 
     <h4>Report for Year: <?= h($year) ?></h4>
 

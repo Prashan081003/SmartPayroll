@@ -2,29 +2,46 @@
     <h3><?= __('Employee Monthly Salary Report') ?></h3>
 
     <!-- Filter -->
-    <div class="filters">
-        <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <?= $this->Form->control('month', [
-            'type' => 'select',
-            'options' => [
-                '01' => 'January', '02' => 'February', '03' => 'March',
-                '04' => 'April', '05' => 'May', '06' => 'June',
-                '07' => 'July', '08' => 'August', '09' => 'September',
-                '10' => 'October', '11' => 'November', '12' => 'December'
-            ],
-            'value' => $month,
-            'label' => 'Month'
-        ]) ?>
-        <?= $this->Form->control('year', [
-            'type' => 'number',
-            'value' => $year,
-            'min' => 2020,
-            'max' => date('Y'),
-            'label' => 'Year'
-        ]) ?>
-        <?= $this->Form->button(__('Generate Report'), ['type' => 'submit']) ?>
-        <?= $this->Form->end() ?>
-    </div>
+<!-- Filter -->
+<div class="filters" style="display: flex; align-items: flex-end; gap: 10px;">
+    <?= $this->Form->create(null, ['type' => 'get', 'style' => 'display:flex; align-items:flex-end; gap:10px;']) ?>
+
+    <?= $this->Form->control('month', [
+        'type' => 'select',
+        'options' => [
+            '01' => 'January', '02' => 'February', '03' => 'March',
+            '04' => 'April', '05' => 'May', '06' => 'June',
+            '07' => 'July', '08' => 'August', '09' => 'September',
+            '10' => 'October', '11' => 'November', '12' => 'December'
+        ],
+        'value' => $month,
+        'label' => false,   // hide label to save space
+        'empty' => 'Month'
+    ]) ?>
+
+    <?= $this->Form->control('year', [
+        'type' => 'number',
+        'value' => $year,
+        'min' => 2020,
+        'max' => date('Y'),
+        'label' => false,   // hide label
+        'placeholder' => 'Year'
+    ]) ?>
+
+    <?= $this->Form->control('department_id', [
+        'type' => 'select',
+        'options' => $departments,       // pass departments array from controller
+        'empty' => 'All Departments',
+        'value' => $this->request->getQuery('department_id'),
+        'label' => false
+    ]) ?>
+
+    <?= $this->Form->button(__('Generate Report'), ['type' => 'submit', 'class' => 'button']) ?>
+
+    <?= $this->Form->end() ?>
+</div>
+
+
 
     <h4>Report for: <?= date('F Y', strtotime("$year-$month-01")) ?></h4>
 

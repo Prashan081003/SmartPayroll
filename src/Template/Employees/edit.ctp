@@ -23,11 +23,17 @@
         </div>
 
         <div class="form-row">
-            <div class="form-group">
-                <?= $this->Form->control('department', [
+             <div class="form-group">
+                <?= $this->Form->control('department_id', [
+                    'options' => $departments,
+                    'empty' => '-- Select Department --',
                     'required' => true,
-                    'label' => 'Department *'
+                    'label' => 'Department *',
+                    'class' => !empty($employee->errors('department_id')) ? 'error-field' : ''
                 ]) ?>
+                <?php if (!empty($employee->errors('department_id'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('department_id')) ?></div>
+                <?php endif; ?>
             </div>
 
             <div class="form-group">

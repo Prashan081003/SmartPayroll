@@ -34,6 +34,10 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/reports/department-monthly', ['controller' => 'Reports', 'action' => 'departmentMonthlySalary']);
     $routes->connect('/reports/employee-monthly', ['controller' => 'Reports', 'action' => 'employeeMonthlySalary']);
     $routes->connect('/reports/employee-yearly', ['controller' => 'Reports', 'action' => 'employeeYearlySalary']);
+     
+    //Departments
+     $routes->connect('/departments', ['controller' => 'Departments', 'action' => 'index']);
+
 
     // Fallback route
     $routes->fallbacks(DashedRoute::class);

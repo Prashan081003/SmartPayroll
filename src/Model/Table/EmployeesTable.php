@@ -20,6 +20,12 @@ class EmployeesTable extends Table
         $this->addBehavior('Timestamp');
 
         // Associations
+         // Add this relationship in initialize()
+        $this->belongsTo('Departments', [
+            'foreignKey' => 'department_id',
+            'joinType' => 'LEFT'
+        ]);
+
         $this->hasMany('Attendances', [
             'foreignKey' => 'employee_id',
             'dependent' => true
@@ -49,11 +55,11 @@ class EmployeesTable extends Table
         ->requirePresence('name', 'create')
         ->notEmpty('name', 'Please enter the name');
 
-    // Department
+    //Department 
     $validator
-        ->maxLength('department', 50)
-        ->requirePresence('department', 'create')
-        ->notEmpty('department', 'Please enter the department');
+        ->integer('department_id')
+        ->requirePresence('department_id', 'create')
+        ->notEmpty('department_id', 'Please select a department');
 
     // Designation
     $validator

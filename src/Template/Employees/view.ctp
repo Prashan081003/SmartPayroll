@@ -20,10 +20,10 @@
                 <span><?= h($employee->name) ?></span>
             </div>
             
-            <div class="info-item">
-                <label>Department:</label>
-                <span><?= h($employee->department) ?></span>
-            </div>
+                <div class="info-item">
+            <label>Department:</label>
+                    <span><?= $employee->has('department') ? h($employee->department->name) : '<em>Not Assigned</em>' ?></span>
+                </div>
             
             <div class="info-item">
                 <label>Designation:</label>

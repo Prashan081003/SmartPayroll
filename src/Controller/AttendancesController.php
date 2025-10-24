@@ -155,56 +155,113 @@ class AttendancesController extends AppController
     /**
      * Monthly Attendance Report
      */
-    public function monthlyReport()
-    {
-        $month = $this->request->query('month') ?: date('m');
-        $year = $this->request->query('year') ?: date('Y');
+  public function monthlyReport()
+{
+    $month = $this->request->getQuery('month') ?: date('m');
+    $year = $this->request->getQuery('year') ?: date('Y');
+    $employeeId = $this->request->getQuery('employee_id');
+    $departmentId = $this->request->getQuery('department_id');
+    $statusFilter = $this->request->getQuery('status');
 
-        // Get all employees
-        $employees = $this->Attendances->Employees->find()
-            ->where(['status' => 'active'])
-            ->order(['employee_id' => 'ASC'])
-            ->all();
+    // Get all employees (for filter dropdown)
+    $employees = $this->Attendances->Employees->find('list', [
+        'keyField' => 'id',
+        'valueField' => 'name'
+    ])
+    ->where(['Employees.status' => 'active'])
+    ->order(['Employees.employee_id' => 'ASC'])
+    ->toArray();
 
-        // Get attendance records for the month
-        $attendanceRecords = $this->Attendances->getMonthlyAttendance($month, $year);
+    // Get all departments (for filter dropdown)
+    $departments = $this->Attendances->Employees->Departments->find('list', [
+        'keyField' => 'id',
+        'valueField' => 'name'
+    ])
+    ->order(['Departments.name' => 'ASC'])
+    ->toArray();
 
-        // Organize data by employee
-        $attendanceByEmployee = [];
-        foreach ($attendanceRecords as $record) {
-            $empId = $record->employee_id;
-            $day = date('d', strtotime($record->attendance_date));
+    // Base query for attendance records
+    $query = $this->Attendances->find()
+        ->contain(['Employees.Departments'])
+        ->where([
+            'MONTH(Attendances.attendance_date)' => $month,
+            'YEAR(Attendances.attendance_date)' => $year
+        ]);
 
-            if (!isset($attendanceByEmployee[$empId])) {
-                $attendanceByEmployee[$empId] = [];
-            }
-
-            $attendanceByEmployee[$empId][$day] = $record->status;
-        }
-
-        // Get number of days in month
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-
-        // Build report data
-        $reportData = [];
-        foreach ($employees as $employee) {
-            $dailyAttendance = [];
-            for ($day = 1; $day <= $daysInMonth; $day++) {
-                $dailyAttendance[$day] = isset($attendanceByEmployee[$employee->id][$day])
-                    ? $attendanceByEmployee[$employee->id][$day]
-                    : '-';
-            }
-
-            $reportData[] = [
-                'employee_id' => $employee->employee_id,
-                'name' => $employee->name,
-                'department' => $employee->department,
-                'daily_attendance' => $dailyAttendance
-            ];
-        }
-
-        $this->set(compact('reportData', 'month', 'year', 'daysInMonth'));
+    // Apply filters dynamically
+    if (!empty($employeeId)) {
+        $query->where(['Attendances.employee_id' => $employeeId]); // ✅ unambiguous
     }
+
+    if (!empty($departmentId)) {
+        $query->where(['Employees.department_id' => $departmentId]); // ✅ unambiguous
+    }
+
+    if (!empty($statusFilter)) {
+        $query->where(['Attendances.status' => $statusFilter]); // ✅ unambiguous
+    }
+
+    $attendanceRecords = $query->all();
+
+    // Organize data by employee
+    $attendanceByEmployee = [];
+    foreach ($attendanceRecords as $record) {
+        $empId = $record->employee_id;
+        $day = date('d', strtotime($record->attendance_date));
+
+        if (!isset($attendanceByEmployee[$empId])) {
+            $attendanceByEmployee[$empId] = [];
+        }
+
+        $attendanceByEmployee[$empId][$day] = $record->status;
+    }
+
+    // Get number of days in month
+    $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+    // Fetch filtered employees for display
+    $filteredEmployees = $this->Attendances->Employees->find()
+        ->contain(['Departments'])
+        ->where(['Employees.status' => 'active'])
+        ->order(['Employees.employee_id' => 'ASC']);
+
+    if (!empty($employeeId)) {
+        $filteredEmployees->where(['Employees.id' => $employeeId]);
+    }
+
+    if (!empty($departmentId)) {
+        $filteredEmployees->where(['Employees.department_id' => $departmentId]);
+    }
+
+    // Build final report data
+    $reportData = [];
+    foreach ($filteredEmployees as $employee) {
+        $dailyAttendance = [];
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $dailyAttendance[$day] = isset($attendanceByEmployee[$employee->id][$day])
+                ? $attendanceByEmployee[$employee->id][$day]
+                : '-';
+        }
+
+        $reportData[] = [
+            'employee_id' => $employee->employee_id,
+            'name' => $employee->name,
+            'department' => $employee->department->name ?? '-', // ✅ safe access
+            'daily_attendance' => $dailyAttendance
+        ];
+    }
+
+    $this->set(compact(
+        'reportData',
+        'month',
+        'year',
+        'daysInMonth',
+        'employees',
+        'departments'
+    ));
+}
+
+
 
     public function index()
     {
