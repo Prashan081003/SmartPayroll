@@ -2,9 +2,10 @@
     <h3><?= __('Generate Payslip') ?></h3>
 
     <?= $this->Form->create(null) ?>
-    <fieldset>
-        <legend><?= __('Payslip Details') ?></legend>
-        
+   <fieldset>
+    <legend><?= __('Payslip Details') ?></legend>
+    
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
         <?= $this->Form->control('employee_id', [
             'options' => $employees,
             'empty' => 'Select Employee',
@@ -21,7 +22,8 @@
                 '10' => 'October', '11' => 'November', '12' => 'December'
             ],
             'value' => date('m'),
-            'required' => true
+            'required' => true,
+            'label' => 'Month'
         ]) ?>
 
         <?= $this->Form->control('year', [
@@ -29,8 +31,10 @@
             'value' => date('Y'),
             'min' => 2020,
             'max' => date('Y'),
-            'required' => true
+            'required' => true,
+            'label' => 'Year'
         ]) ?>
+    </div>
 
         <div class="bonuses-section">
             <h4>Bonuses</h4>
@@ -75,7 +79,7 @@
         </div>
     </fieldset>
 
-    <?= $this->Form->button(__('Generate Payslip'), ['type' => 'submit']) ?>
+   <?= $this->Form->button(__('Generate Payslip'), ['type' => 'submit', 'class' => 'button']) ?>
     <?= $this->Html->link(__('Cancel'), ['action' => 'index'], ['class' => 'button']) ?>
     <?= $this->Form->end() ?>
 </div>

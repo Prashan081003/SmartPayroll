@@ -40,3 +40,53 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<style>
+/* Action Buttons Styling */
+.btn-action {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    color: white;
+}
+
+.btn-view {
+    background-color: #17a2b8;
+}
+
+.btn-view:hover {
+    background-color: #138496;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+.button-secondary {
+    background-color: #6c757d;
+}
+
+.button-secondary:hover {
+    background-color: #5a6268;
+}
+</style>

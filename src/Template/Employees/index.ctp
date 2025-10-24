@@ -71,11 +71,15 @@
                             <?= h($employee->status) ?>
                         </span>
                     </td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'btn-action btn-view']) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $employee->id], ['class' => 'btn-action btn-edit']) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $employee->id], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->id), 'class' => 'btn-action btn-delete']) ?>
-                    </td>
+                   <td class="actions">
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'btn-action btn-view']) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $employee->id], ['class' => 'btn-action btn-edit']) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $employee->id], [
+                        'confirm' => __('Are you sure you want to delete # {0}?', $employee->id),
+                        'class' => 'btn-action btn-delete'
+                    ]) ?>
+                </td>
+
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -118,6 +122,7 @@
 }
 
 /* Action Buttons Styling */
+
 .btn-action {
     display: inline-block;
     padding: 6px 12px;
@@ -165,10 +170,5 @@
     background-color: #5a6268;
 }
 
-/* Table Header - Black Text */
-/* table th {
-    background-color: #667eea;
-    color: #000000 !important;
-    font-weight: 600;
-} */
+
 </style>
