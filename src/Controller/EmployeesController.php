@@ -7,28 +7,26 @@ class EmployeesController extends AppController
 {
             public function index()
         {
-            // Start query with relation (if departments table is associated)
-            $query = $this->Employees->find('all', [
-                'contain' => ['Departments'] // include department data
-            ]);
-
             $request = $this->request->getQueryParams(); // safer way for CakePHP 3.4+
-
-            // 🔹 Filtering by Department
-            if (!empty($request['department'])) {
-                $query->where(['Employees.department_id' => $request['department']]);
-            }
+            // Start query with relation (if departments table is associated)
+            $query = $this->Employees->find('withFilters',$request);
 
 
-            // 🔹 Filtering by Designation
-            if (!empty($request['designation'])) {
-                $query->where(['Employees.designation' => $request['designation']]);
-            }
+            // // 🔹 Filtering by Department
+            // if (!empty($request['department'])) {
+            //     $query->where(['Employees.department_id' => $request['department']]);
+            // }
 
-            // 🔹 Filtering by Status
-            if (!empty($request['status'])) {
-                $query->where(['Employees.status' => $request['status']]);
-            }
+
+            // // 🔹 Filtering by Designation
+            // if (!empty($request['designation'])) {
+            //     $query->where(['Employees.designation' => $request['designation']]);
+            // }
+
+            // // 🔹 Filtering by Status
+            // if (!empty($request['status'])) {
+            //     $query->where(['Employees.status' => $request['status']]);
+            // }
 
             // 🔹 Sorting (default: employee_id ASC)
             $sortField = !empty($request['sort']) ? $request['sort'] : 'Employees.employee_id';
@@ -70,7 +68,7 @@ class EmployeesController extends AppController
         $employee = $this->Employees->newEntity();
 
         if ($this->request->is('post')) {
-            $data = $this->request->data; // CakePHP 3.4 compatible
+            $data = $this->request->getData();; // CakePHP 3.4 compatible
             unset($data['employee_id']); // auto-generated
 
             $employee = $this->Employees->patchEntity($employee, $data);
@@ -93,10 +91,10 @@ class EmployeesController extends AppController
                 $this->Flash->error(__('The employee could not be saved. Please, try again.'));
             }
         }
-       // Added this line
-    $departments = $this->Employees->Departments->find('list', ['limit' => 200]);
-    
-    $this->set(compact('employee', 'departments'));
+            // Added this line
+            $departments = $this->Employees->Departments->find('list', ['limit' => 200]);
+            
+            $this->set(compact('employee', 'departments'));
     }
 
     public function edit($id = null)

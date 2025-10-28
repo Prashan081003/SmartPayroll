@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use Cake\ORM\Query;
 use Cake\Validation\Validator;
 use Cake\ORM\RulesChecker;
 use Cake\Event\Event;
@@ -14,27 +15,17 @@ class EmployeesTable extends Table
         parent::initialize($config);
 
         $this->setTable('employees');
-        $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
-
-        // Associations
-         // Add this relationship in initialize()
         $this->belongsTo('Departments', [
             'foreignKey' => 'department_id',
-            'joinType' => 'LEFT'
+            'joinType' => 'INNER'
         ]);
 
         $this->hasMany('Attendances', [
-            'foreignKey' => 'employee_id',
-            'dependent' => true
+            'foreignKey' => 'employee_id'
         ]);
 
-        $this->hasMany('Payslips', [
-            'foreignKey' => 'employee_id',
-            'dependent' => true
-        ]);
     }
 
  public function validationDefault(Validator $validator)
@@ -107,7 +98,35 @@ class EmployeesTable extends Table
 
     return $validator;
 }
+  public function findWithFilters(Query $query, array $options)
+    {
+        $query = $query->contain(['Departments', 'Attendances']);
 
+        if (!empty($options['employee_id'])) {            
+            $query->where(['Employees.id' => $options['employee_id']]);
+        }
+
+        if (!empty($options['department'])) {
+            $query->where(['Employees.department_id' => $options['department']]);
+        }
+         
+          if (!empty($options['designation'])) {
+            $query->where(['Employees.designation' => $options['designation']]);
+        }
+        if (!empty($options['month']) && !empty($options['year'])) {
+            $start = "{$options['year']}-{$options['month']}-01";
+            $end = date("Y-m-t", strtotime($start));
+
+            $query->matching('Attendances', function ($q) use ($start, $end) {
+                return $q->where([
+                    'Attendances.attendance_date >=' => $start,
+                    'Attendances.attendance_date <=' => $end
+                ]);
+            });
+        }
+
+        return $query;
+    }
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['employee_id']));

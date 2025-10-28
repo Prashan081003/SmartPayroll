@@ -18,14 +18,34 @@ class DepartmentsController extends AppController
         ]);
         $this->set(compact('department'));
     }
+
+// public function add()
+// {
+//     // Use newEntity() for CakePHP 3.x
+//     $department = $this->Departments->newEntity();
+    
+//     if ($this->request->is('post')) {
+//         $department = $this->Departments->patchEntity($department, $this->request->getData());
+        
+//         if ($this->Departments->save($department)) {
+//             $this->Flash->success(__('The department has been saved.'));
+//             return $this->redirect(['action' => 'index']);
+//         }
+//         $this->Flash->error(__('The department could not be saved. Please try again.'));
+//     }
+    
+//     $this->set(compact('department'));
+// }
 public function add()
 {
+    // Use newEntity() for CakePHP 3.x
     $department = $this->Departments->newEntity();
 
-    if ($this->request->is('post')) {
-        $this->request->allowMethod(['post']); // Only allow POST here
 
+    // Only run this if POST request
+    if ($this->request->is('post')) {
         $department = $this->Departments->patchEntity($department, $this->request->getData());
+
         if ($this->Departments->save($department)) {
             $this->Flash->success(__('The department has been saved.'));
             return $this->redirect(['action' => 'index']);
@@ -35,6 +55,7 @@ public function add()
 
     $this->set(compact('department'));
 }
+
 
 
     public function edit($id = null)
