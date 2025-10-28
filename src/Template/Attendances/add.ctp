@@ -20,7 +20,7 @@
             echo $this->Form->control('attendance_date');
             echo $this->Form->control('status');
         ?>
-    </fieldset>
+    </fieldset>  
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div> 

@@ -18,7 +18,7 @@
 <div class="departments view large-9 medium-8 columns content">
     <h3><?= h($department->name) ?></h3>
     <table class="vertical-table">
-        <tr>
+        <tr> 
             <th scope="row"><?= __('Name') ?></th>
             <td><?= h($department->name) ?></td>
         </tr>

@@ -11,12 +11,12 @@
                 ['action' => 'delete', $department->id],
                 ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]
             )
-        ?></li>
+        ?></li> 
         <li><?= $this->Html->link(__('List Departments'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Employees'), ['controller' => 'Employees', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Employee'), ['controller' => 'Employees', 'action' => 'add']) ?></li>
     </ul>
-</nav>
+</nav>  
 <div class="departments form large-9 medium-8 columns content">
     <?= $this->Form->create($department) ?>
     <fieldset>

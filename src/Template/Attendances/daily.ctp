@@ -33,7 +33,7 @@
                     <th>Employee ID</th>
                     <th>Name</th>
                     <th>Status</th>
-                </tr>
+                </tr>  
             </thead>
             <tbody>
                 <?php foreach ($attendanceData as $record): ?>

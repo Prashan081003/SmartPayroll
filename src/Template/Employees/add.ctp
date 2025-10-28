@@ -14,8 +14,8 @@
             <li>✓ Employee ID is auto-generated</li>
         </ul>
     </div>
-
-    <?= $this->Form->create($employee, ['novalidate' => true]) ?>
+ 
+      <?= $this->Form->create($employee, ['novalidate' => true]) ?>
     <fieldset>
         <legend><?= __('Employee Information') ?></legend>
         

@@ -18,7 +18,7 @@
             <div class="info-item">
                 <label>Name:</label>
                 <span><?= h($employee->name) ?></span>
-            </div>
+             </div>
             
                 <div class="info-item">
             <label>Department:</label>

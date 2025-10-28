@@ -23,8 +23,8 @@ class DepartmentsTable extends Table
         ]);
     }
 
-public function validationDefault(Validator $validator)
-{
+     public function validationDefault(Validator $validator)
+   {
     $validator
         ->integer('id')
         ->allowEmpty('id', 'create');

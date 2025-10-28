@@ -42,7 +42,7 @@
     <div class="table-responsive">
         <table>
             <thead class="table-header">
-                <tr >
+                <!-- <tr >
                     <th><?= $this->Paginator->sort('employee_id', 'Employee ID') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('department') ?></th>
@@ -53,7 +53,7 @@
                     <th><?= $this->Paginator->sort('mobile') ?></th>
                     <th><?= $this->Paginator->sort('status') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
-                </tr>
+                </tr> -->
             </thead>
             <tbody>
                 <?php foreach ($employees as $employee): ?>
@@ -69,7 +69,7 @@
                     <td>
                         <span class="badge <?= $employee->status == 'active' ? 'badge-success' : 'badge-danger' ?>">
                             <?= h($employee->status) ?>
-                        </span>
+                         </span>
                     </td>
                    <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'btn-action btn-view']) ?>
@@ -86,16 +86,7 @@
         </table>
     </div>
     
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+
 </div>
 
 <style>
