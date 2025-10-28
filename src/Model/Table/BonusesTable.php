@@ -22,7 +22,6 @@ class BonusesTable extends Table
             'joinType' => 'INNER'
         ]);
     }
-
     public function validationDefault(Validator $validator)
     {
         $validator

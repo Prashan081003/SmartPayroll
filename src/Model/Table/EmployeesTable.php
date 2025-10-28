@@ -99,7 +99,7 @@ class EmployeesTable extends Table
     return $validator;
 }
   public function findWithFilters(Query $query, array $options)
-    {
+      {
         $query = $query->contain(['Departments', 'Attendances']);
 
         if (!empty($options['employee_id'])) {            

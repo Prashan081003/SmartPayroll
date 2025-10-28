@@ -69,7 +69,6 @@ class AttendancesTable extends Table
         $rules->add($rules->existsIn(['employee_id'], 'Employees'));
         return $rules;
     }
-
     /**
      * Get attendance for a specific date
      */

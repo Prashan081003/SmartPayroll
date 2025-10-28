@@ -100,7 +100,7 @@ class PayslipsTable extends Table
     /**
      * Generate payslip for an employee
      */
-                public function generatePayslip($employeeId, $month, $year, $bonuses = [], $deductions = [])
+            public function generatePayslip($employeeId, $month, $year, $bonuses = [], $deductions = [])
             {
                 // Use TableRegistry to get other models
                 $employeesTable = TableRegistry::get('Employees');
@@ -117,7 +117,7 @@ class PayslipsTable extends Table
                 // Calculate daily rate and earned salary
                 $dailyRate = $employee->base_salary / $totalWorkingDays;
                 $earnedSalary = $dailyRate * $daysWorked;
-                
+                  
                 // Calculate totals
                 $totalBonus = array_sum(array_column($bonuses, 'amount'));
                 $totalDeductions = array_sum(array_column($deductions, 'amount'));

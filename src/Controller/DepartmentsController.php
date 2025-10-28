@@ -5,37 +5,7 @@ use App\Controller\AppController;
 
 class DepartmentsController extends AppController
 {
-    public function index()
-    {
-        $departments = $this->paginate($this->Departments->find()->contain(['Employees']));
-        $this->set(compact('departments'));
-    }
-
-    public function view($id = null)
-    {
-        $department = $this->Departments->get($id, [
-            'contain' => ['Employees']
-        ]);
-        $this->set(compact('department'));
-    }
-
-// public function add()
-// {
-//     // Use newEntity() for CakePHP 3.x
-//     $department = $this->Departments->newEntity();
-    
-//     if ($this->request->is('post')) {
-//         $department = $this->Departments->patchEntity($department, $this->request->getData());
-        
-//         if ($this->Departments->save($department)) {
-//             $this->Flash->success(__('The department has been saved.'));
-//             return $this->redirect(['action' => 'index']);
-//         }
-//         $this->Flash->error(__('The department could not be saved. Please try again.'));
-//     }
-    
-//     $this->set(compact('department'));
-// }
+           
 public function add()
 {
     // Use newEntity() for CakePHP 3.x
@@ -55,6 +25,20 @@ public function add()
 
     $this->set(compact('department'));
 }
+
+    public function index()
+    {
+        $departments = $this->paginate($this->Departments->find()->contain(['Employees']));
+        $this->set(compact('departments'));
+    }
+
+    public function view($id = null)
+    {
+        $department = $this->Departments->get($id, [
+            'contain' => ['Employees']
+        ]);
+        $this->set(compact('department'));
+    }
 
 
 

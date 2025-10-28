@@ -30,7 +30,7 @@
                 'max' => date('Y'),
                 'label' => 'Year'
             ]) ?>
-        </div>
+        </div> 
 
         <!-- Employee Name -->
         <div>

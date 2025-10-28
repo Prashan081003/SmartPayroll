@@ -22,7 +22,7 @@
             ]) ?>
         </div>
 
-        <div class="form-row">
+         <div class="form-row">
              <div class="form-group">
                 <?= $this->Form->control('department_id', [
                     'options' => $departments,

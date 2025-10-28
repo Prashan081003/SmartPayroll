@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             <?php foreach ($departments as $department): ?>
-            <tr>
+             <tr>
                 <td><?= $this->Number->format($department->id) ?></td>
                 <td><?= h($department->name) ?></td>
                 <td><?= h($department->code) ?></td>

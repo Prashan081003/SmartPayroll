@@ -7,9 +7,71 @@ use Cake\I18n\Time;
 class AttendancesController extends AppController
 {
     /**
+     * AJAX endpoint to update attendance status
+     */
+    public function updateStatus()
+    {
+        $this->request->allowMethod(['post']);
+        $this->autoRender = false;
+
+        // For CakePHP 3.4, manually set headers
+        $this->response->type('json');
+
+        $employeeId = $this->request->data('employee_id');
+        $date = $this->request->data('date');
+        $status = $this->request->data('status');
+
+        // Validate input
+        if (!$employeeId || !$date || !$status) {
+            $this->response->body(json_encode([
+                'success' => false,
+                'message' => 'Missing required parameters'
+            ]));
+            return $this->response;
+        }
+
+        // Check if attendance record exists
+        $attendance = $this->Attendances->find()
+            ->where([
+                'employee_id' => $employeeId,
+                'attendance_date' => $date
+            ])
+            ->first();
+
+        if ($attendance) {
+            // Update existing record
+            $attendance = $this->Attendances->patchEntity($attendance, [
+                'status' => $status
+            ]);
+        } else {
+            // Create new record
+            $attendance = $this->Attendances->newEntity([
+                'employee_id' => $employeeId,
+                'attendance_date' => $date,
+                'status' => $status
+            ]);
+        }
+
+        if ($this->Attendances->save($attendance)) {
+            $this->response->body(json_encode([
+                'success' => true,
+                'message' => 'Attendance updated successfully'
+            ]));
+        } else {
+            $this->response->body(json_encode([
+                'success' => false,
+                'message' => 'Failed to update attendance',
+                'errors' => $attendance->errors() // use errors() in 3.4
+            ]));
+        }
+
+        return $this->response;
+    }
+        /**
      * Daily Attendance Management
      */
-    public function daily()
+   
+       public function daily()
     {
         // Get date from query string, default to today
         $selectedDate = $this->request->query('date');
@@ -88,68 +150,6 @@ class AttendancesController extends AppController
 
         $this->set(compact('attendanceData', 'selectedDate', 'markedCount', 'totalEmployees'));
     }
-    /**
-     * AJAX endpoint to update attendance status
-     */
-    public function updateStatus()
-    {
-        $this->request->allowMethod(['post']);
-        $this->autoRender = false;
-
-        // For CakePHP 3.4, manually set headers
-        $this->response->type('json');
-
-        $employeeId = $this->request->data('employee_id');
-        $date = $this->request->data('date');
-        $status = $this->request->data('status');
-
-        // Validate input
-        if (!$employeeId || !$date || !$status) {
-            $this->response->body(json_encode([
-                'success' => false,
-                'message' => 'Missing required parameters'
-            ]));
-            return $this->response;
-        }
-
-        // Check if attendance record exists
-        $attendance = $this->Attendances->find()
-            ->where([
-                'employee_id' => $employeeId,
-                'attendance_date' => $date
-            ])
-            ->first();
-
-        if ($attendance) {
-            // Update existing record
-            $attendance = $this->Attendances->patchEntity($attendance, [
-                'status' => $status
-            ]);
-        } else {
-            // Create new record
-            $attendance = $this->Attendances->newEntity([
-                'employee_id' => $employeeId,
-                'attendance_date' => $date,
-                'status' => $status
-            ]);
-        }
-
-        if ($this->Attendances->save($attendance)) {
-            $this->response->body(json_encode([
-                'success' => true,
-                'message' => 'Attendance updated successfully'
-            ]));
-        } else {
-            $this->response->body(json_encode([
-                'success' => false,
-                'message' => 'Failed to update attendance',
-                'errors' => $attendance->errors() // use errors() in 3.4
-            ]));
-        }
-
-        return $this->response;
-    }
-
     /**
      * Monthly Attendance Report
      */

@@ -69,7 +69,7 @@
                     <td>
                         <span class="badge <?= $employee->status == 'active' ? 'badge-success' : 'badge-danger' ?>">
                             <?= h($employee->status) ?>
-                        </span>
+                         </span>
                     </td>
                    <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'btn-action btn-view']) ?>

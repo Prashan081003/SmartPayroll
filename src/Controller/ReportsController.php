@@ -6,7 +6,60 @@ use Cake\ORM\TableRegistry;
 
 class ReportsController extends AppController
 {
+    
+
     /**
+     * Employee Monthly Salary Report
+     */
+public function employeeMonthlySalary()
+{
+    $this->loadModel('Payslips');
+    $this->loadModel('Departments'); // to fetch departments for filter
+
+    $month = $this->request->getQuery('month', date('m'));
+    $year = $this->request->getQuery('year', date('Y'));
+    $departmentId = $this->request->getQuery('department_id'); // department filter
+
+    // Fetch all departments for filter dropdown
+    $departments = $this->Departments->find('list', [
+        'keyField' => 'id',
+        'valueField' => 'name'
+    ])->order(['name' => 'ASC'])->toArray();
+
+    // Build payslip query
+    $query = $this->Payslips->find()
+        ->contain(['Employees' => ['Departments']])
+        ->where([
+            'Payslips.month' => $month,
+            'Payslips.year' => $year
+        ])
+        ->order(['Employees.employee_id' => 'ASC']);
+
+    // Apply department filter if selected
+    if (!empty($departmentId)) {
+        $query->where(['Employees.department_id' => $departmentId]);
+    }
+
+    $payslips = $query->all();
+
+    // Prepare report data
+    $reportData = [];
+    foreach ($payslips as $payslip) {
+        $reportData[] = [
+            'employee' => $payslip->employee->name,
+            'employee_id' => $payslip->employee->employee_id,
+            'department' => $payslip->employee->department->name ?? '-',
+            'base_pay' => $payslip->base_pay,
+            'bonus' => $payslip->total_bonus,
+            'deductions' => $payslip->total_deductions,
+            'net_salary' => $payslip->net_salary
+        ];
+    }
+
+    $this->set(compact('reportData', 'month', 'year', 'departments', 'departmentId'));
+}
+
+/**
      * Department Monthly Salary Report
      */
 public function departmentMonthlySalary()
@@ -64,59 +117,6 @@ public function departmentMonthlySalary()
 
     $this->set(compact('reportData', 'month', 'year', 'departments', 'selectedDepartment'));
 }
-
-    /**
-     * Employee Monthly Salary Report
-     */
-public function employeeMonthlySalary()
-{
-    $this->loadModel('Payslips');
-    $this->loadModel('Departments'); // to fetch departments for filter
-
-    $month = $this->request->getQuery('month', date('m'));
-    $year = $this->request->getQuery('year', date('Y'));
-    $departmentId = $this->request->getQuery('department_id'); // department filter
-
-    // Fetch all departments for filter dropdown
-    $departments = $this->Departments->find('list', [
-        'keyField' => 'id',
-        'valueField' => 'name'
-    ])->order(['name' => 'ASC'])->toArray();
-
-    // Build payslip query
-    $query = $this->Payslips->find()
-        ->contain(['Employees' => ['Departments']])
-        ->where([
-            'Payslips.month' => $month,
-            'Payslips.year' => $year
-        ])
-        ->order(['Employees.employee_id' => 'ASC']);
-
-    // Apply department filter if selected
-    if (!empty($departmentId)) {
-        $query->where(['Employees.department_id' => $departmentId]);
-    }
-
-    $payslips = $query->all();
-
-    // Prepare report data
-    $reportData = [];
-    foreach ($payslips as $payslip) {
-        $reportData[] = [
-            'employee' => $payslip->employee->name,
-            'employee_id' => $payslip->employee->employee_id,
-            'department' => $payslip->employee->department->name ?? '-',
-            'base_pay' => $payslip->base_pay,
-            'bonus' => $payslip->total_bonus,
-            'deductions' => $payslip->total_deductions,
-            'net_salary' => $payslip->net_salary
-        ];
-    }
-
-    $this->set(compact('reportData', 'month', 'year', 'departments', 'departmentId'));
-}
-
-
 
     /**
      * Employee Yearly Salary Report

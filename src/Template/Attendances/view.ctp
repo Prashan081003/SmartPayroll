@@ -18,7 +18,7 @@
 <div class="attendances view large-9 medium-8 columns content">
     <h3><?= h($attendance->id) ?></h3>
     <table class="vertical-table">
-        <tr>
+        <tr> 
             <th scope="row"><?= __('Employee') ?></th>
             <td><?= $attendance->has('employee') ? $this->Html->link($attendance->employee->name, ['controller' => 'Employees', 'action' => 'view', $attendance->employee->id]) : '' ?></td>
         </tr>

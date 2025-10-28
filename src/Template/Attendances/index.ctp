@@ -45,7 +45,7 @@
                                 <td data-label="Status">
                                     <span class="status-badge status-<?= strtolower($attendance->status) ?>">
                                         <?= h($attendance->status) ?>
-                                    </span>
+                                     </span>
                                 </td>
                                 <td data-label="Actions" class="actions-cell">
                                     <?= $this->Html->link('View', ['action' => 'view', $attendance->id], ['class' => 'btn-action btn-view']) ?>

@@ -5,54 +5,54 @@ use App\Controller\AppController;
 
 class EmployeesController extends AppController
 {
-            public function index()
-        {
-            $request = $this->request->getQueryParams(); // safer way for CakePHP 3.4+
-            // Start query with relation (if departments table is associated)
-            $query = $this->Employees->find('withFilters',$request);
+    public function index()
+    {
+                $request = $this->request->getQueryParams(); // safer way for CakePHP 3.4+
+                // Start query with relation (if departments table is associated)
+                $query = $this->Employees->find('withFilters',$request);
 
 
-            // // 🔹 Filtering by Department
-            // if (!empty($request['department'])) {
-            //     $query->where(['Employees.department_id' => $request['department']]);
-            // }
+                // // 🔹 Filtering by Department
+                // if (!empty($request['department'])) {
+                //     $query->where(['Employees.department_id' => $request['department']]);
+                // }
 
 
-            // // 🔹 Filtering by Designation
-            // if (!empty($request['designation'])) {
-            //     $query->where(['Employees.designation' => $request['designation']]);
-            // }
+                // // 🔹 Filtering by Designation
+                // if (!empty($request['designation'])) {
+                //     $query->where(['Employees.designation' => $request['designation']]);
+                // }
 
-            // // 🔹 Filtering by Status
-            // if (!empty($request['status'])) {
-            //     $query->where(['Employees.status' => $request['status']]);
-            // }
+                // // 🔹 Filtering by Status
+                // if (!empty($request['status'])) {
+                //     $query->where(['Employees.status' => $request['status']]);
+                // }
 
-            // 🔹 Sorting (default: employee_id ASC)
-            $sortField = !empty($request['sort']) ? $request['sort'] : 'Employees.employee_id';
-            $sortDirection = !empty($request['direction']) ? $request['direction'] : 'asc';
-            $query->order([$sortField => $sortDirection]);
+                // 🔹 Sorting (default: employee_id ASC)
+                $sortField = !empty($request['sort']) ? $request['sort'] : 'Employees.employee_id';
+                $sortDirection = !empty($request['direction']) ? $request['direction'] : 'asc';
+                $query->order([$sortField => $sortDirection]);
 
-            // 🔹 Pagination
-            $employees = $this->paginate($query);
+                // 🔹 Pagination
+                $employees = $this->paginate($query);
 
-            // 🔹 Fetch distinct departments for filter dropdown (from Departments table)
-            $departments = $this->Employees->Departments->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'name'
-            ])->toArray();
+                // 🔹 Fetch distinct departments for filter dropdown (from Departments table)
+                $departments = $this->Employees->Departments->find('list', [
+                    'keyField' => 'id',
+                    'valueField' => 'name'
+                ])->toArray();
 
-            // 🔹 Fetch unique designations for filter dropdown
-            $designations = $this->Employees->find('list', [
-                'keyField' => 'designation',
-                'valueField' => 'designation'
-            ])
-            ->distinct(['Employees.designation'])
-            ->toArray();
+                // 🔹 Fetch unique designations for filter dropdown
+                $designations = $this->Employees->find('list', [
+                    'keyField' => 'designation',
+                    'valueField' => 'designation'
+                ])
+                ->distinct(['Employees.designation'])
+                ->toArray();
 
-            // 🔹 Pass data to view
-            $this->set(compact('employees', 'departments', 'designations'));
-}
+                // 🔹 Pass data to view
+                $this->set(compact('employees', 'departments', 'designations'));
+    }
 
     public function view($id = null)
     {
