@@ -8,6 +8,17 @@
                 <?= h($employee->status) ?>
             </span>
         </div>
+
+        <!-- Profile Photo Section at Top -->
+        <div class="employee-photo-section" style="text-align: center; margin: 20px 0;">
+            <?= $this->cell('Image', [
+                'Employees',
+                $employee->id,
+                'photo',
+                null,
+                'view'
+            ]) ?>
+        </div>
         
         <div class="info-grid">
             <div class="info-item">
@@ -20,10 +31,10 @@
                 <span><?= h($employee->name) ?></span>
             </div>
             
-                <div class="info-item">
-            <label>Department:</label>
-                    <span><?= $employee->has('department') ? h($employee->department->name) : '<em>Not Assigned</em>' ?></span>
-                </div>
+            <div class="info-item">
+                <label>Department:</label>
+                <span><?= $employee->has('department') ? h($employee->department->name) : '<em>Not Assigned</em>' ?></span>
+            </div>
             
             <div class="info-item">
                 <label>Designation:</label>
@@ -50,7 +61,7 @@
                 <span><?= h($employee->mobile) ?></span>
             </div>
         </div>
-        
+
         <div class="actions">
             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $employee->id], ['class' => 'button']) ?>
             <?= $this->Html->link(__('Back to List'), ['action' => 'index'], ['class' => 'button button-secondary']) ?>
@@ -61,6 +72,7 @@
             ) ?>
         </div>
     </div>
+</div>
 
     <?php if (!empty($employee->attendances)): ?>
     <div class="related-section">

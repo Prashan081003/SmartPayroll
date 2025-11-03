@@ -14,7 +14,7 @@
             <li>✓ Employee ID is auto-generated</li>
         </ul>
     </div>
-
+ 
     <?= $this->Form->create($employee, ['novalidate' => true]) ?>
     <fieldset>
         <legend><?= __('Employee Information') ?></legend>
@@ -32,18 +32,18 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <?= $this->Form->control('department_id', [
-                'options' => $departments,
-                'empty' => '-- Select Department --',
-                'required' => true,
-                'label' => 'Department *',
-                'class' => !empty($employee->errors('department_id')) ? 'error-field' : ''
-            ]) ?>
-            <?php if (!empty($employee->errors('department_id'))): ?>
-                <div class="error-message"><?= implode(', ', $employee->errors('department_id')) ?></div>
-            <?php endif; ?>
-        </div>
+            <div class="form-group">
+                <?= $this->Form->control('department_id', [
+                    'options' => $departments,
+                    'empty' => '-- Select Department --',
+                    'required' => true,
+                    'label' => 'Department *',
+                    'class' => !empty($employee->errors('department_id')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('department_id'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('department_id')) ?></div>
+                <?php endif; ?>
+            </div>
 
             <div class="form-group">
                 <?= $this->Form->control('designation', [
@@ -88,45 +88,112 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <?= $this->Form->control('email', [
-                'type' => 'email',
-                'required' => true,
-                'label' => 'Email Address *',
-                'placeholder' => 'employee@company.com',
-                'class' => !empty($employee->errors('email')) ? 'error-field' : ''
-            ]) ?>
-            <?php if (!empty($employee->errors('email'))): ?>
-                <div class="error-message"><?= implode(', ', $employee->errors('email')) ?></div>
-            <?php endif; ?>
+        <div class="form-row">
+            <div class="form-group">
+                <?= $this->Form->control('email', [
+                    'type' => 'email',
+                    'required' => true,
+                    'label' => 'Email Address *',
+                    'placeholder' => 'employee@company.com',
+                    'class' => !empty($employee->errors('email')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('email'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('email')) ?></div>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group">
+                <?= $this->Form->control('mobile', [
+                    'required' => true,
+                    'label' => 'Mobile Number *',
+                    'placeholder' => '9876543210',
+                    'maxlength' => '15',
+                    'class' => !empty($employee->errors('mobile')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('mobile'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('mobile')) ?></div>
+                <?php endif; ?>
+            </div>
         </div>
 
-        <div class="form-group">
-            <?= $this->Form->control('mobile', [
-                'required' => true,
-                'label' => 'Mobile Number *',
-                'placeholder' => '9876543210',
-                'maxlength' => '15',
-                'class' => !empty($employee->errors('mobile')) ? 'error-field' : ''
-            ]) ?>
-            <?php if (!empty($employee->errors('mobile'))): ?>
-                <div class="error-message"><?= implode(', ', $employee->errors('mobile')) ?></div>
-            <?php endif; ?>
+        <div class="form-row">
+            <div class="form-group">
+                <?= $this->Form->control('address.street', [
+                    'required' => true,
+                    'label' => 'Street *',
+                    'placeholder' => '123 Main St',
+                    'class' => !empty($employee->errors('address_street')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('address_street'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('address_street')) ?></div>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group">
+                <?= $this->Form->control('address.city', [
+                    'required' => true,
+                    'label' => 'City *',
+                    'placeholder' => 'Your City',
+                    'class' => !empty($employee->errors('address_city')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('address_city'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('address_city')) ?></div>
+                <?php endif; ?>
+            </div>
         </div>
 
-        <div class="form-group">
-            <?= $this->Form->control('status', [
-                'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
-                'default' => 'active',
-                'label' => 'Status'
-            ]) ?>
+        <div class="form-row">
+            <div class="form-group">
+                <?= $this->Form->control('address.state', [
+                    'required' => true,
+                    'label' => 'State *',
+                    'placeholder' => 'Your State',
+                    'class' => !empty($employee->errors('address_state')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('address_state'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('address_state')) ?></div>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group">
+                <?= $this->Form->control('address.pincode', [
+                    'required' => true,
+                    'label' => 'Pincode *',
+                    'placeholder' => '123456',
+                    'maxlength' => '10',
+                    'class' => !empty($employee->errors('address_pincode')) ? 'error-field' : ''
+                ]) ?>
+                <?php if (!empty($employee->errors('address.pincode'))): ?>
+                    <div class="error-message"><?= implode(', ', $employee->errors('address.pincode')) ?></div>
+                <?php endif; ?>
+            </div>
         </div>
+
     </fieldset>
-    
+
+    <?php if (!empty($employee->id)): ?>
+    <!-- Profile Image Section (only show after employee is created) -->
+    <div class="employee-photo-section mt-3">
+        <h4>Profile Image</h4>
+        <?= $this->cell('Image', [
+            'Employees',
+            $employee->id,
+            'photo',
+            ['controller' => 'Employees', 'action' => 'uploadPhoto', $employee->id],
+            'edit'
+        ]) ?>
+    </div>
+    <?php else: ?>
+    <div class="info-message" style="padding: 15px; background: #e7f3fe; border-left: 4px solid #2196F3; margin: 20px 0;">
+        <strong>ℹ️ Note:</strong> Save the employee first, then you can upload a profile photo.
+    </div>
+    <?php endif; ?>
+
     <div class="form-actions">
         <?= $this->Form->button(__('Save Employee'), ['class' => 'button']) ?>
         <?= $this->Html->link(__('Cancel'), ['action' => 'index'], ['class' => 'button button-secondary']) ?>
     </div>
+
     <?= $this->Form->end() ?>
 </div>
 

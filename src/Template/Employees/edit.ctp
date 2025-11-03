@@ -79,21 +79,33 @@
                 'maxlength' => '15'
             ]) ?>
         </div>
-
-        <div class="form-group">
-            <?= $this->Form->control('status', [
-                'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
-                'label' => 'Status'
-            ]) ?>
-        </div>
-    </fieldset>
-    
-    <div class="form-actions">
-        <?= $this->Form->button(__('Update Employee'), ['class' => 'button']) ?>
-        <?= $this->Html->link(__('Cancel'), ['action' => 'index'], ['class' => 'button button-secondary']) ?>
-        <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'button button-info']) ?>
+  <div class="form-group">
+        <?= $this->Form->control('status', [
+            'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
+            'label' => 'Status'
+        ]) ?>
     </div>
-    <?= $this->Form->end() ?>
+
+</fieldset>
+
+<!-- Profile Image Section with Upload/Re-upload -->
+<div class="employee-photo-section mt-3">
+    <h4>Profile Image</h4>
+    <?= $this->cell('Image', [
+        'Employees',
+        $employee->id,
+        'photo',
+        ['controller' => 'Employees', 'action' => 'uploadPhoto', $employee->id],
+        'edit'
+    ]) ?>
+</div>
+
+<div class="form-actions">
+    <?= $this->Form->button(__('Update Employee'), ['class' => 'button']) ?>
+    <?= $this->Html->link(__('Cancel'), ['action' => 'index'], ['class' => 'button button-secondary']) ?>
+    <?= $this->Html->link(__('View'), ['action' => 'view', $employee->id], ['class' => 'button button-info']) ?>
+</div>
+<?= $this->Form->end() ?>
 </div>
 
 <style>

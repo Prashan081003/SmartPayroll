@@ -55,7 +55,8 @@ public function departmentMonthlySalary()
         $reportData[$deptName]['deductions'] += $payslip->total_deductions;
         $reportData[$deptName]['net_salary'] += $payslip->net_salary;
     }
-
+ $testReportData= [] ;
+   $testReportData[] = $reportData; 
     // 🔹 Get department list for dropdown
     $departments = $this->Departments->find('list', [
         'keyField' => 'id',

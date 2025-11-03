@@ -35,6 +35,12 @@ class EmployeesTable extends Table
             'foreignKey' => 'employee_id',
             'dependent' => true
         ]);
+        $this->hasOne('Addresses', [
+    'foreignKey' => 'employee_id',  // addresses.employee_id points to employees.id
+    'dependent' => true,            // delete address if employee is deleted
+    'cascadeCallbacks' => true
+]);
+
     }
 
  public function validationDefault(Validator $validator)
